@@ -18,6 +18,12 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import ConductoresPage from "./pages/Dashboard/Elements/Conductores";
+import PasajerosPage from "./pages/Dashboard/Elements/Pasajeros";
+import VehiculosPage from "./pages/Dashboard/Elements/Vehiculos";
+import ViajesPage from "./pages/Dashboard/Elements/Viajes";
+import SoportePage from "./pages/Dashboard/Elements/Soporte";
+import PromocionPage from "./pages/Dashboard/Elements/Promociones";
 
 export default function App() {
   return (
@@ -28,7 +34,12 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
-
+            <Route path="/conductores" element={<ConductoresPage />} />
+            <Route path="/pasajeros" element={<PasajerosPage />} />
+            <Route path="/vehiculos" element={<VehiculosPage />} />
+            <Route path="/viajes" element={<ViajesPage />} />
+            <Route path="/soporte" element={<SoportePage />} />
+            <Route path="/promociones" element={<PromocionPage />} />
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />

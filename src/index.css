@@ -54,6 +54,8 @@ layer(base);
   --color-brand-900: #262e89;
   --color-brand-950: #161950;
 
+  --color-blue-dark-Trayek: #18365d;
+  --color-blue-light-Trayek: #204b80;
   --color-blue-light-25: #f5fbff;
   --color-blue-light-50: #f0f9ff;
   --color-blue-light-100: #e0f2fe;
@@ -173,6 +175,10 @@ layer(base);
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+.root {
+  isolation: isolate;
+}
+
 @layer base {
   *,
   ::after,
@@ -186,7 +192,7 @@ layer(base);
     cursor: pointer;
   }
   body {
-    @apply relative font-normal font-outfit z-1 bg-gray-50;
+    @apply relative font-normal font-outfit z-1 bg-gray-50 dark:bg-blue-light-Trayek;
   }
 }
 
