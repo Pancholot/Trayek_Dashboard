@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Popover } from "@base-ui-components/react/popover";
 import { Eye } from "lucide-react";
 
