@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { Link } from "react-router";
+import { CircleUserRound } from "lucide-react";
 
 export default function NotificationDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -84,40 +85,27 @@ export default function NotificationDropdown() {
               onItemClick={closeDropdown}
               className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
             >
-              <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
-                <img
-                  width={40}
-                  height={40}
-                  src="/images/user/driver-david.jpg"
-                  alt="Driver"
-                  className="w-full overflow-hidden rounded-full object-cover"
-                />
-                <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
-              </span>
+              <Link to="/conductores" className="flex gap-3 w-full">
+                <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
+                  <CircleUserRound className="w-full h-full" />
+                  <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
+                </span>
 
-              <span className="block flex-1">
-                <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
-                  <span className="font-medium text-gray-800 dark:text-white/90">
-                    David Conductor Prueba
+                <span className="block flex-1">
+                  <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
+                    <span className="font-medium text-gray-800 dark:text-white/90">
+                      David Conductor Prueba
+                    </span>
+                    <span> solicita verificación de documentos</span>
                   </span>
-                  <span> solicita verificación de documentos</span>
-                </span>
 
-                <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                  <span>Conductor</span>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <span>hace 5 minutos</span>
+                  <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span>Conductor</span>
+                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                    <span>hace 5 minutos</span>
+                  </span>
                 </span>
-              </span>
-
-              <div className="flex flex-col gap-2">
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition">
-                  Aprobar
-                </button>
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition">
-                  Negar
-                </button>
-              </div>
+              </Link>
             </DropdownItem>
           </li>
 
@@ -127,40 +115,27 @@ export default function NotificationDropdown() {
               onItemClick={closeDropdown}
               className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
             >
-              <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
-                <img
-                  width={40}
-                  height={40}
-                  src="/images/user/driver-antonio.jpg"
-                  alt="Driver"
-                  className="w-full overflow-hidden rounded-full object-cover"
-                />
-                <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
-              </span>
+              <Link to="/conductores" className="flex gap-3 w-full">
+                <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
+                  <CircleUserRound className="w-full h-full" />
+                  <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
+                </span>
 
-              <span className="block flex-1">
-                <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
-                  <span className="font-medium text-gray-800 dark:text-white/90">
-                    Antonio Conductor Prueba
+                <span className="block flex-1">
+                  <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
+                    <span className="font-medium text-gray-800 dark:text-white/90">
+                      Antonio Conductor Prueba
+                    </span>
+                    <span> solicita verificación de documentos</span>
                   </span>
-                  <span> solicita verificación de documentos</span>
-                </span>
 
-                <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                  <span>Conductor</span>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <span>hace 8 minutos</span>
+                  <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span>Conductor</span>
+                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                    <span>hace 8 minutos</span>
+                  </span>
                 </span>
-              </span>
-
-              <div className="flex flex-col gap-2">
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition">
-                  Aprobar
-                </button>
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition">
-                  Negar
-                </button>
-              </div>
+              </Link>
             </DropdownItem>
           </li>
 
@@ -170,40 +145,27 @@ export default function NotificationDropdown() {
               onItemClick={closeDropdown}
               className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5"
             >
-              <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
-                <img
-                  width={40}
-                  height={40}
-                  src="/images/user/driver-francisco.jpg"
-                  alt="Driver"
-                  className="w-full overflow-hidden rounded-full object-cover"
-                />
-                <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
-              </span>
+              <Link to="/conductores" className="flex gap-3 w-full">
+                <span className="relative block w-full h-10 rounded-full z-1 max-w-10">
+                  <CircleUserRound className="w-full h-full" />
+                  <span className="absolute bottom-0 right-0 z-10 h-2.5 w-full max-w-2.5 rounded-full border-[1.5px] border-white bg-warning-500 dark:border-gray-900"></span>
+                </span>
 
-              <span className="block flex-1">
-                <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
-                  <span className="font-medium text-gray-800 dark:text-white/90">
-                    Francisco Conductor Prueba
+                <span className="block flex-1">
+                  <span className="mb-1.5 block text-theme-sm text-gray-500 dark:text-gray-400 space-x-1">
+                    <span className="font-medium text-gray-800 dark:text-white/90">
+                      Francisco Conductor Prueba
+                    </span>
+                    <span> solicita verificación de documentos</span>
                   </span>
-                  <span> solicita verificación de documentos</span>
-                </span>
 
-                <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
-                  <span>Conductor</span>
-                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
-                  <span>hace 10 minutos</span>
+                  <span className="flex items-center gap-2 text-gray-500 text-theme-xs dark:text-gray-400">
+                    <span>Conductor</span>
+                    <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                    <span>hace 10 minutos</span>
+                  </span>
                 </span>
-              </span>
-
-              <div className="flex flex-col gap-2">
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-green-500 text-white hover:bg-green-600 transition">
-                  Aprobar
-                </button>
-                <button className="text-xs font-semibold px-3 py-1 rounded-md bg-red-500 text-white hover:bg-red-600 transition">
-                  Negar
-                </button>
-              </div>
+              </Link>
             </DropdownItem>
           </li>
           {/* Add more items as needed */}
