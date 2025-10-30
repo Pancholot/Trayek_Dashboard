@@ -235,7 +235,7 @@ const AppSidebar: React.FC = () => {
               />
               <img
                 className="hidden dark:block w-auto max-h-20 object-contain"
-                src="/images/logo/Trayek-Dark.png"
+                src="\images\logo\Trayek-Dark.png"
                 alt="Logo"
               />
             </>
