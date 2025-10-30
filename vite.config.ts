@@ -18,4 +18,5 @@ export default defineConfig({
   build: {
     outDir: "dist", // ✅ coincide con el directorio que Vercel espera
   },
+  publicDir: "public", // ✅ asegura que los archivos estáticos se sirvan correctamente
 });
