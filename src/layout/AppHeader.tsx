@@ -86,12 +86,12 @@ const AppHeader: React.FC = () => {
             <div className="w-[120px] h-[45px] flex items-center justify-center overflow-hidden">
               <img
                 className="block dark:hidden w-full h-full object-contain"
-                src="/images/logo/Trayek-Light.png"
+                src="/images/logo/trayek-light.png"
                 alt="Trayek Logo Light"
               />
               <img
                 className="hidden dark:block w-full h-full object-contain"
-                src="/images/logo/Trayek-Dark.png"
+                src="/images/logo/trayek-dark.png"
                 alt="Trayek Logo Dark"
               />
             </div>
@@ -124,12 +124,12 @@ const AppHeader: React.FC = () => {
             <div className="w-[130px] h-[45px] flex items-center justify-center overflow-visible p-2">
               <img
                 className="block dark:hidden w-full object-contain"
-                src="/images/logo/Trayek-Light.png"
+                src="/images/logo/trayek-light.png"
                 alt="Trayek Logo Light"
               />
               <img
                 className="hidden dark:block w-full object-contain"
-                src="/images/logo/Trayek-Dark.png"
+                src="/images/logo/trayek-dark.png"
                 alt="Trayek Logo Dark"
               />
             </div>

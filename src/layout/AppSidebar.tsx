@@ -230,12 +230,12 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden w-auto max-h-20 object-contain"
-                src="/images/logo/Trayek-Light.png"
+                src="/images/logo/trayek-light.png"
                 alt="Logo"
               />
               <img
                 className="hidden dark:block w-auto max-h-20 object-contain"
-                src="\images\logo\Trayek-Dark.png"
+                src="/images/logo/trayek-dark.png"
                 alt="Logo"
               />
             </>
