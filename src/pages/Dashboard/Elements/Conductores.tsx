@@ -33,11 +33,10 @@ const data: Conductor[] = [
     nombre: "David Conductor Prueba",
     correo: "david_conductor@trayek.com",
     telefono: "2226062862",
-    Foto: "../../../../public/images/Fotos Pruebas/Foto.jpg",
-    INE: "../../../../public/images/Fotos Pruebas/Ine.jpg",
-    licencia: "../../../../public/images/Fotos Pruebas/Licencia.jpg",
-    tarjetaCirculacion:
-      "../../../../public/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
+    Foto: "/public/images/Fotos Pruebas/Foto.jpg",
+    INE: "/public/images/Fotos Pruebas/Ine.jpg",
+    licencia: "/public/images/Fotos Pruebas/Licencia.jpg",
+    tarjetaCirculacion: "/public/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
     verificado: false,
   },
   {
