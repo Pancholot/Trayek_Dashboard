@@ -14,9 +14,9 @@ export default defineConfig({
       },
     }),
   ],
-  base: "/", // ✅ asegura que los assets se carguen desde la raíz en producción
+  base: "/",
   build: {
-    outDir: "dist", // ✅ coincide con el directorio que Vercel espera
+    outDir: "dist",
   },
-  publicDir: "public", // ✅ asegura que los archivos estáticos se sirvan correctamente
+  publicDir: "public",
 });
