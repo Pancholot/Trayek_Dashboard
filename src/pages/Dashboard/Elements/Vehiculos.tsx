@@ -37,7 +37,7 @@ const data: Vehiculo[] = [
     año: "2020",
     color: "Blanco",
     tipo: "Sedán",
-    foto_placa: "/public/images/Fotos Pruebas/Placa.png",
+    foto_placa: "/images/Fotos Pruebas/Placa.png",
   },
   {
     id: 2,
