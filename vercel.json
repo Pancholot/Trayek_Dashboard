@@ -3,9 +3,9 @@
   "public": true,
   "routes": [
     {
-      "src": "/assets/(.*)",
+      "src": "/(.*)\\.(js|css|png|jpg|jpeg|gif|svg|ico|webp|json|txt|pdf|woff2?)",
       "headers": { "Cache-Control": "public, max-age=31536000, immutable" },
-      "dest": "/assets/$1"
+      "dest": "/$1.$2"
     },
     {
       "src": "/(.*)",
