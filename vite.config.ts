@@ -9,10 +9,13 @@ export default defineConfig({
     svgr({
       svgrOptions: {
         icon: true,
-        // This will transform your SVG to a React component
         exportType: "named",
         namedExport: "ReactComponent",
       },
     }),
   ],
+  base: "/", // ✅ asegura que los assets se carguen desde la raíz en producción
+  build: {
+    outDir: "dist", // ✅ coincide con el directorio que Vercel espera
+  },
 });
