@@ -1,4 +1,3 @@
-import React from "react";
 import PageMeta from "../../components/common/PageMeta";
 import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
 import SignInForm from "../../components/auth/SignInForm";
