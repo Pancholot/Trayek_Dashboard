@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
-import SignUp from "./pages/AuthPages/SignUp";
+//import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import UserProfiles from "./pages/UserProfiles";
 import Videos from "./pages/UiElements/Videos";
@@ -23,7 +23,7 @@ import PasajerosPage from "./pages/Dashboard/Elements/Pasajeros";
 import VehiculosPage from "./pages/Dashboard/Elements/Vehiculos";
 import ViajesPage from "./pages/Dashboard/Elements/Viajes";
 import SoportePage from "./pages/Dashboard/Elements/Soporte";
-import PromocionPage from "./pages/Dashboard/Elements/Promociones";
+//import PromocionPage from "./pages/Dashboard/Elements/Promociones";
 
 export default function App() {
   return (
@@ -39,7 +39,7 @@ export default function App() {
             <Route path="/vehiculos" element={<VehiculosPage />} />
             <Route path="/viajes" element={<ViajesPage />} />
             <Route path="/soporte" element={<SoportePage />} />
-            <Route path="/promociones" element={<PromocionPage />} />
+            {/*<Route path="/promociones" element={<PromocionPage />} />*/}
             {/* Others Page */}
             <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -66,7 +66,7 @@ export default function App() {
 
           {/* Auth Layout */}
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          {/*<Route path="/signup" element={<SignUp />} />*/}
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

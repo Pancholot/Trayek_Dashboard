@@ -240,12 +240,22 @@ const AppSidebar: React.FC = () => {
               />
             </>
           ) : (
-            <img
-              src="/images/logo/logo-icon.svg"
-              alt="Logo"
-              width={32}
-              height={32}
-            />
+            <>
+              <img
+                src="/images/logo/Isotipo-trayek-light.png"
+                alt="Logo Light"
+                width={32}
+                height={32}
+                className="block dark:hidden"
+              />
+              <img
+                src="/images/logo/Isotipo-trayek-dark.png"
+                alt="Logo Dark"
+                width={32}
+                height={32}
+                className="hidden dark:block"
+              />
+            </>
           )}
         </Link>
       </div>
