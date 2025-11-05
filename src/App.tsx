@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
+import { useSelector } from "react-redux";
 import SignIn from "./pages/AuthPages/SignIn";
 //import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
@@ -23,6 +24,7 @@ import PasajerosPage from "./pages/Dashboard/Elements/Pasajeros";
 import VehiculosPage from "./pages/Dashboard/Elements/Vehiculos";
 import ViajesPage from "./pages/Dashboard/Elements/Viajes";
 import SoportePage from "./pages/Dashboard/Elements/Soporte";
+import { Navigate } from "react-router-dom";
 //import PromocionPage from "./pages/Dashboard/Elements/Promociones";
 
 export default function App() {
@@ -33,17 +35,68 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
-            <Route path="/conductores" element={<ConductoresPage />} />
-            <Route path="/pasajeros" element={<PasajerosPage />} />
-            <Route path="/vehiculos" element={<VehiculosPage />} />
-            <Route path="/viajes" element={<ViajesPage />} />
-            <Route path="/soporte" element={<SoportePage />} />
+            <Route
+              index
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/conductores"
+              element={
+                <ProtectedRoute>
+                  <ConductoresPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/pasajeros"
+              element={
+                <ProtectedRoute>
+                  <PasajerosPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/vehiculos"
+              element={
+                <ProtectedRoute>
+                  <VehiculosPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/viajes"
+              element={
+                <ProtectedRoute>
+                  <ViajesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/soporte"
+              element={
+                <ProtectedRoute>
+                  <SoportePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <UserProfiles />
+                </ProtectedRoute>
+              }
+            />
+
             {/*<Route path="/promociones" element={<PromocionPage />} />*/}
             {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
             <Route path="/blank" element={<Blank />} />
+            <Route path="/calendar" element={<Calendar />} />
 
             {/* Forms */}
             <Route path="/form-elements" element={<FormElements />} />
@@ -74,4 +127,17 @@ export default function App() {
       </Router>
     </>
   );
+}
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isLoggedOut = useSelector(
+    (state: { auth: { isLoggedOut: boolean } }) => state.auth.isLoggedOut
+  );
+
+  console.log("isLoggedOut:", isLoggedOut);
+  if (isLoggedOut) {
+    return <Navigate to="/signin" replace />;
+  }
+
+  return <>{children}</>;
 }

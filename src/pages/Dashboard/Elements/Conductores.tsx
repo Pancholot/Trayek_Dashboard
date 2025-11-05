@@ -73,7 +73,11 @@ export default function ConductoresPage() {
       <PageBreadcrumb pageTitle="Conductores" />
       <div className="space-y-6">
         <ComponentCard title="Listado de Conductores">
-          <BasicTable<Conductor> columns={columns} data={data} />
+          <BasicTable<Conductor>
+            tableType="conductores"
+            columns={columns}
+            data={data}
+          />
         </ComponentCard>
       </div>
     </>

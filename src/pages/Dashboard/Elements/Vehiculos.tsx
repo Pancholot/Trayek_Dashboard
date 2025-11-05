@@ -13,6 +13,9 @@ interface Vehiculo {
   color: string;
   tipo: string;
   foto_placa: string;
+  foto_vehiculo: string;
+  seguro_vehiculo: string;
+  verificado: boolean;
 }
 
 const columns: { key: keyof Vehiculo; label: string }[] = [
@@ -25,6 +28,9 @@ const columns: { key: keyof Vehiculo; label: string }[] = [
   { key: "color", label: "Color" },
   { key: "tipo", label: "Tipo" },
   { key: "foto_placa", label: "Foto Placa" },
+  { key: "foto_vehiculo", label: "Foto Vehículo" },
+  { key: "seguro_vehiculo", label: "Seguro Vehículo" },
+  { key: "verificado", label: "Verificación" },
 ];
 
 const data: Vehiculo[] = [
@@ -38,6 +44,9 @@ const data: Vehiculo[] = [
     color: "Blanco",
     tipo: "Sedán",
     foto_placa: "/images/Fotos Pruebas/Placa.png",
+    foto_vehiculo: "/images/Fotos Pruebas/Coche.jpg",
+    seguro_vehiculo: "/images/Fotos Pruebas/seguro.png",
+    verificado: false,
   },
   {
     id: 2,
@@ -49,6 +58,9 @@ const data: Vehiculo[] = [
     color: "Negro",
     tipo: "Sedán",
     foto_placa: "/images/docs/placa-67-DEF-2.png",
+    foto_vehiculo: "/images/docs/vehiculo-67-DEF-2.png",
+    seguro_vehiculo: "/images/docs/seguro-67-DEF-2.png",
+    verificado: false,
   },
   {
     id: 3,
@@ -60,6 +72,9 @@ const data: Vehiculo[] = [
     color: "Azul",
     tipo: "Sedán",
     foto_placa: "/images/docs/placa-87-GHI-3.png",
+    foto_vehiculo: "/images/docs/vehiculo-87-GHI-3.png",
+    seguro_vehiculo: "/images/docs/seguro-87-GHI-3.png",
+    verificado: false,
   },
 ];
 
@@ -73,7 +88,11 @@ export default function VehiculosPage() {
       <PageBreadcrumb pageTitle="Vehiculos" />
       <div className="space-y-6">
         <ComponentCard title="Listado de Vehiculos">
-          <BasicTable<Vehiculo> columns={columns} data={data} />
+          <BasicTable<Vehiculo>
+            tableType="vehiculos"
+            columns={columns}
+            data={data}
+          />
         </ComponentCard>
       </div>
     </>

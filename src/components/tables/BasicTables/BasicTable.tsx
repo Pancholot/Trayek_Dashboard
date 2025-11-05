@@ -9,6 +9,7 @@ import {
 import { X, Check } from "lucide-react";
 import ImagePopover from "../../ui/popup/popup";
 import Verify from "../../ui/verify/verificar";
+import Suspend from "../../ui/verify/suspend";
 
 interface Column<T> {
   key: keyof T;
@@ -18,11 +19,13 @@ interface Column<T> {
 interface BasicTableProps<T> {
   columns: Column<T>[];
   data: T[];
+  tableType?: "conductores" | "vehiculos";
 }
 
 export default function BasicTable<T extends object>({
   columns,
   data,
+  tableType,
 }: BasicTableProps<T>) {
   const [imageStatus, setImageStatus] = useState<Record<string, boolean>>({});
 
@@ -98,7 +101,12 @@ export default function BasicTable<T extends object>({
                   if (typeof value === "boolean") {
                     return (
                       <TableCell key={key} className="px-5 py-4 text-center">
-                        <Verify initialValue={value} />
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Verify initialValue={value} />
+                          {tableType === "conductores" && (
+                            <Suspend initialValue={value} />
+                          )}
+                        </div>
                       </TableCell>
                     );
                   }

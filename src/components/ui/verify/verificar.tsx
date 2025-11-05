@@ -19,7 +19,7 @@ export default function Verify({ initialValue }: VerificationProps) {
       )}
       <button
         onClick={toggleVerification}
-        className="text-sm px-3 py-1 border bg-blue-dark-Trayek text-white dark:bg-white dark:text-black border-gray-300 rounded-lg hover:bg-blue-light-Trayek dark:hover:bg-gray-300 transition"
+        className="text-sm px-3 py-1 border bg-blue-dark-Trayek text-white dark:bg-white dark:text-black border-gray-300 rounded-lg hover:bg-blue-light-Trayek dark:hover:bg-gray-300 transition min-w-[105px] text-center"
       >
         {verified ? "Negar" : "Aprobar"}
       </button>

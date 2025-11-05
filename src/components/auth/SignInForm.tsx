@@ -5,21 +5,26 @@ import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
-import { LogIn } from "../../api/apiService";
+import { apiService } from "../../api/apiService";
 import { useNavigate } from "react-router-dom";
 import Alert from "../ui/alert/Alert";
+import { useDispatch } from "react-redux";
+import { setIsLoggedIn } from "../../store/authSlice";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-  const handleSignIn = async () => {
-    const response = await LogIn(email, password);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleSignIn = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const response = await apiService.logIn(email, password);
     if (response) {
       console.log("Login successful");
+      dispatch(setIsLoggedIn());
       navigate("/");
     } else {
       setErrorMessage("Correo electrónico o contraseña incorrectos.");
@@ -43,66 +48,60 @@ export default function SignInForm() {
               cuenta.
             </p>
           </div>
-          <div>
+          <form onSubmit={handleSignIn} className="space-y-6">
             <div>
-              <div className="space-y-6">
-                <div>
-                  <Label>
-                    Correo Electrónico <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input
-                    placeholder="ejemplo@mail.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    onFocus={() => setErrorMessage("")}
-                  />
-                </div>
-                <div>
-                  <Label>
-                    Contraseña <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Ingrese su contraseña"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      onFocus={() => setErrorMessage("")}
-                    />
-                    <span
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                    >
-                      {showPassword ? (
-                        <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                      ) : (
-                        <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
-                      )}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Checkbox checked={isChecked} onChange={setIsChecked} />
-                    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                      Mantener Sesión Iniciada
-                    </span>
-                  </div>
-                  <Link
-                    to="/reset-password"
-                    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                  >
-                    ¿Olvidaste tu contraseña?
-                  </Link>
-                </div>
-                <div>
-                  <Button className="w-full" size="sm" onClick={handleSignIn}>
-                    Inicio de Sesión
-                  </Button>
-                </div>
+              <Label>
+                Correo Electrónico <span className="text-error-500">*</span>{" "}
+              </Label>
+              <Input
+                placeholder="ejemplo@mail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setErrorMessage("")}
+              />
+            </div>
+            <div>
+              <Label>
+                Contraseña <span className="text-error-500">*</span>{" "}
+              </Label>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Ingrese su contraseña"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onFocus={() => setErrorMessage("")}
+                />
+                <span
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                >
+                  {showPassword ? (
+                    <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
+                  ) : (
+                    <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400 size-5" />
+                  )}
+                </span>
               </div>
             </div>
-          </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Checkbox checked={isChecked} onChange={setIsChecked} />
+                <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
+                  Mantener Sesión Iniciada
+                </span>
+              </div>
+              <Link
+                to="/reset-password"
+                className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+              >
+                ¿Olvidaste tu contraseña?
+              </Link>
+            </div>
+            <Button type="submit" className="w-full" size="sm">
+              Inicio de Sesión
+            </Button>
+          </form>
         </div>
       </div>
     </div>
