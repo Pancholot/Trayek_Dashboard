@@ -25,7 +25,7 @@ import VehiculosPage from "./pages/Dashboard/Elements/Vehiculos";
 import ViajesPage from "./pages/Dashboard/Elements/Viajes";
 import SoportePage from "./pages/Dashboard/Elements/Soporte";
 import { Navigate } from "react-router-dom";
-//import PromocionPage from "./pages/Dashboard/Elements/Promociones";
+import PromocionPage from "./pages/Dashboard/Elements/Promociones";
 
 export default function App() {
   return (
@@ -93,7 +93,14 @@ export default function App() {
               }
             />
 
-            {/*<Route path="/promociones" element={<PromocionPage />} />*/}
+            <Route
+              path="/promociones"
+              element={
+                <ProtectedRoute>
+                  <PromocionPage />
+                </ProtectedRoute>
+              }
+            />
             {/* Others Page */}
             <Route path="/blank" element={<Blank />} />
             <Route path="/calendar" element={<Calendar />} />
