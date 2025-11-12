@@ -93,7 +93,11 @@ export default function PromocionPage() {
           }
         >
           <div className="flex justify-between items-center mb-4"></div>
-          <BasicTable<Promocion> columns={columns} data={data} />
+          <BasicTable<Promocion>
+            tableType="promociones"
+            columns={columns}
+            data={data}
+          />
         </ComponentCard>
       </div>
       <AddPromotionModal

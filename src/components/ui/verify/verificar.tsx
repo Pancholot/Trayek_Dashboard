@@ -3,9 +3,15 @@ import { useState } from "react";
 
 interface VerificationProps {
   initialValue: boolean;
+  labelOn?: string;
+  labelOff?: string;
 }
 
-export default function Verify({ initialValue }: VerificationProps) {
+export default function Verify({
+  initialValue,
+  labelOn = "Aprobar",
+  labelOff = "Negar",
+}: VerificationProps) {
   const [verified, setVerified] = useState(initialValue);
 
   const toggleVerification = () => setVerified(!verified);
@@ -21,7 +27,7 @@ export default function Verify({ initialValue }: VerificationProps) {
         onClick={toggleVerification}
         className="text-sm px-3 py-1 border bg-blue-dark-Trayek text-white dark:bg-white dark:text-black border-gray-300 rounded-lg hover:bg-blue-light-Trayek dark:hover:bg-gray-300 transition min-w-[105px] text-center"
       >
-        {verified ? "Negar" : "Aprobar"}
+        {verified ? labelOff : labelOn}
       </button>
     </div>
   );
