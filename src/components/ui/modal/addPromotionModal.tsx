@@ -60,6 +60,7 @@ export default function AddPromotionModal({
       todosUsuarios: todosUsuarios as "Todos" | "Antiguos" | "Nuevos" | "NA",
       conductores: conductores as "Todos" | "Antiguos" | "Nuevos" | "NA",
       pasajeros: pasajeros as "Todos" | "Antiguos" | "Nuevos" | "NA",
+      aplicado: false,
     });
 
     setConcepto("");
