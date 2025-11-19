@@ -54,7 +54,7 @@ export default function ModulesGrid() {
       {modules.map((mod, index) => (
         <div
           key={index}
-          onClick={() => navigate(mod.path)} // ✅ go to the module's page
+          onClick={() => navigate(mod.path)}
           className={`p-6 rounded-xl text-white flex justify-between items-center shadow-md transition-transform transform hover:scale-105 hover:opacity-90 cursor-pointer ${mod.color}`}
         >
           <div>

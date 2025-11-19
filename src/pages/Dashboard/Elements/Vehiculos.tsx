@@ -2,6 +2,9 @@ import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import PageMeta from "../../../components/common/PageMeta";
 import BasicTable from "../../../components/tables/BasicTables/BasicTable";
+import Pagination from "../../../components/common/Pagination";
+import SearchBar from "../../../components/common/SearchBar";
+import { useState } from "react";
 
 interface Vehiculo {
   id: number;
@@ -79,6 +82,22 @@ const data: Vehiculo[] = [
 ];
 
 export default function VehiculosPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const rowsPerPage = 2;
+
+  const filteredData = data.filter(
+    (vehiculo) =>
+      vehiculo.conductor.toLowerCase().includes(search.toLowerCase()) ||
+      vehiculo.placa.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   return (
     <>
       <PageMeta
@@ -87,11 +106,30 @@ export default function VehiculosPage() {
       />
       <PageBreadcrumb pageTitle="Vehiculos" />
       <div className="space-y-6">
-        <ComponentCard title="Listado de Vehiculos">
+        <ComponentCard
+          title="Listado de Vehiculos"
+          headerAction={
+            <div className="flex items-center">
+              <SearchBar
+                value={search}
+                onChange={(value) => {
+                  setSearch(value);
+                  setCurrentPage(1);
+                }}
+                placeholder="Buscar vehículo..."
+              />
+            </div>
+          }
+        >
           <BasicTable<Vehiculo>
             tableType="vehiculos"
             columns={columns}
-            data={data}
+            data={paginatedData}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onChange={setCurrentPage}
           />
         </ComponentCard>
       </div>

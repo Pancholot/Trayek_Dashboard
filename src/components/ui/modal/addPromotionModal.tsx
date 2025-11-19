@@ -17,6 +17,7 @@ export default function AddPromotionModal({
   const [concepto, setConcepto] = useState("");
   const [tipoDescuento, setTipoDescuento] = useState("Porcentaje");
   const [descuento, setDescuento] = useState("");
+  const [cantidadTickets, setCantidadTickets] = useState("");
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null);
   const [fechaExpiracion, setFechaExpiracion] = useState<Date | null>(null);
   const [todosUsuarios, setTodosUsuarios] = useState("");
@@ -55,6 +56,7 @@ export default function AddPromotionModal({
       concepto,
       tipoDescuento,
       descuento,
+      cantidadTickets,
       fechaInicio: fechaInicio.toISOString().split("T")[0],
       fechaExpiracion: fechaExpiracion.toISOString().split("T")[0],
       todosUsuarios: todosUsuarios as "Todos" | "Antiguos" | "Nuevos" | "NA",
@@ -68,6 +70,7 @@ export default function AddPromotionModal({
     setDescuento("");
     setFechaInicio(null);
     setFechaExpiracion(null);
+    setCantidadTickets("");
     setTodosUsuarios("");
     setConductores("");
     setPasajeros("");
@@ -127,13 +130,37 @@ export default function AddPromotionModal({
           {/* Descuento */}
           <input
             className="w-full border rounded p-2"
-            placeholder="Descuento (ej. 15% o $10)"
+            placeholder={
+              tipoDescuento === "Cantidad Fija"
+                ? "Descuento en $ (ej. $10)"
+                : "Descuento en % (ej. 15%)"
+            }
             value={descuento}
             onChange={(e) => setDescuento(e.target.value)}
             required
-            pattern="^(\$\d+(\.\d{1,2})?|(\d+(\.\d{1,2})?%))$"
-            title="El descuento debe ser un valor válido, por ejemplo: '$10' o '15%'."
+            pattern={
+              tipoDescuento === "Cantidad Fija"
+                ? "^\\$\\d+(\\.\\d{1,2})?$"
+                : "^\\d+(\\.\\d{1,2})?%$"
+            }
+            title={
+              tipoDescuento === "Cantidad Fija"
+                ? "Debe ser un monto válido. Ej: $10 o $5.50"
+                : "Debe ser un porcentaje válido. Ej: 15% o 5%"
+            }
           />
+
+          {tipoDescuento === "Cantidad Fija" && (
+            <input
+              className="w-full border rounded p-2"
+              placeholder="Cantidad de Tickets"
+              value={cantidadTickets}
+              onChange={(e) => setCantidadTickets(e.target.value)}
+              required
+              pattern="^[0-9]+$"
+              title="Debe ser un número entero."
+            />
+          )}
 
           {/* Usuarios */}
           <input

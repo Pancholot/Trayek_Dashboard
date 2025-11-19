@@ -10,10 +10,9 @@ export default function AddPromotionButton({
   return (
     <button
       onClick={onClick}
-      className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 flex items-center gap-2 rounded-lg"
+      className="w-15 h-15 rounded-full border-4 bg-blue-light-Trayek border-blue-dark-Trayek dark:border-white dark:bg-blue-600 hover:bg-blue-700 text-white shadow-lg flex items-center justify-center transition-all"
     >
-      <TicketPlus size={18} />
-      Agregar Promoción
+      <TicketPlus size={32} />
     </button>
   );
 }

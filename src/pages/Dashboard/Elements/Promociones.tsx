@@ -5,6 +5,8 @@ import BasicTable from "../../../components/tables/BasicTables/BasicTable";
 import AddPromotionButton from "../../../components/ui/button/addpromotionButton";
 import { useState } from "react";
 import AddPromotionModal from "../../../components/ui/modal/addPromotionModal";
+import SearchBar from "../../../components/common/SearchBar";
+import Pagination from "../../../components/common/Pagination";
 
 export interface Promocion {
   id: number;
@@ -13,6 +15,7 @@ export interface Promocion {
   fechaExpiracion: string;
   tipoDescuento: string;
   descuento: string;
+  cantidadTickets?: string;
   todosUsuarios: "Todos" | "Antiguos" | "Nuevos" | "NA";
   conductores: "Todos" | "Antiguos" | "Nuevos" | "NA";
   pasajeros: "Todos" | "Antiguos" | "Nuevos" | "NA";
@@ -52,6 +55,7 @@ export default function PromocionPage() {
       fechaInicio: "2024-01-01",
       fechaExpiracion: "2024-12-31",
       tipoDescuento: "Cantidad Fija",
+      cantidadTickets: "5",
       descuento: "$10",
       todosUsuarios: "Nuevos",
       conductores: "NA",
@@ -78,6 +82,20 @@ export default function PromocionPage() {
     setData([...data, { id: newId, ...newPromo }]);
   };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const rowsPerPage = 2;
+
+  const filteredData = data.filter((promo) =>
+    promo.concepto.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  const paginatedData = filteredData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  );
+
   return (
     <>
       <PageMeta
@@ -89,17 +107,43 @@ export default function PromocionPage() {
         <ComponentCard
           title="Listado de Promociones"
           headerAction={
-            <AddPromotionButton onClick={() => setModalOpen(true)} />
+            <div className="flex items-center">
+              <SearchBar
+                value={search}
+                onChange={(value) => {
+                  setSearch(value);
+                  setCurrentPage(1);
+                }}
+                placeholder="Buscar promoción..."
+              />
+            </div>
           }
         >
           <div className="flex justify-between items-center mb-4"></div>
           <BasicTable<Promocion>
             tableType="promociones"
             columns={columns}
-            data={data}
+            data={paginatedData.map((item) => ({
+              ...item,
+              descuento:
+                item.tipoDescuento === "Cantidad Fija" && item.cantidadTickets
+                  ? `${item.descuento}\n(${item.cantidadTickets} tickets)`
+                  : item.descuento,
+            }))}
+          />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onChange={setCurrentPage}
           />
         </ComponentCard>
       </div>
+
+      {/* BOTÓN FLOTANTE STICKY */}
+      <div className="fixed bottom-6 right-3 z-50">
+        <AddPromotionButton onClick={() => setModalOpen(true)} />
+      </div>
+
       <AddPromotionModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
