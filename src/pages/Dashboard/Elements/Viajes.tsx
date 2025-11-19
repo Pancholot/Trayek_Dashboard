@@ -88,7 +88,7 @@ export default function ViajesPage() {
                   setSearch(value);
                   setCurrentPage(1);
                 }}
-                placeholder="Buscar vehículo..."
+                placeholder="Buscar viajes..."
               />
             </div>
           }
