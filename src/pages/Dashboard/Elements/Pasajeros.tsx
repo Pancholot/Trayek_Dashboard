@@ -4,60 +4,69 @@ import PageMeta from "../../../components/common/PageMeta";
 import BasicTable from "../../../components/tables/BasicTables/BasicTable";
 import SearchBar from "../../../components/common/SearchBar";
 import Pagination from "../../../components/common/Pagination";
-import { useState } from "react";
+import Passenger from "../../../types/Passenger";
+import { useEffect, useState } from "react";
+import { apiService } from "../../../api/apiService";
+import PageResponse from "../../../types/PageResponse";
+import { useDebounce } from "../../../hooks/useDebounce";
 
-interface Pasajero {
-  id: number;
-  nombre: string;
-  correo: string;
-  telefono: string;
-}
-
-const columns: { key: keyof Pasajero; label: string }[] = [
+const columns: { key: keyof Passenger; label: string }[] = [
   { key: "id", label: "ID" },
-  { key: "nombre", label: "Nombre" },
-  { key: "correo", label: "Correo" },
-  { key: "telefono", label: "Teléfono" },
+  { key: "fullName", label: "Nombre" },
+  { key: "email", label: "Correo" },
+  { key: "phoneNumber", label: "Teléfono" },
+  { key: "verified", label: "Verificación" },
 ];
 
-const data: Pasajero[] = [
+const data: Passenger[] = [
   {
     id: 1,
-    nombre: "Luis Pasajero Prueba",
-    correo: "luis_pasajero@trayek.com",
-    telefono: "8765432101",
+    fullName: "Luis Pasajero Prueba",
+    email: "luis_pasajero@trayek.com",
+    phoneNumber: "8765432101",
+    verified: false,
   },
   {
     id: 2,
-    nombre: "Sergio Pasajero Prueba",
-    correo: "sergio_pasajero@trayek.com",
-    telefono: "5432109876",
+    fullName: "Sergio Pasajero Prueba",
+    email: "sergio_pasajero@trayek.com",
+    phoneNumber: "5432109876",
+    verified: false,
   },
   {
     id: 3,
-    nombre: "Francisco Pasajero Prueba",
-    correo: "francisco_pasajero@trayek.com",
-    telefono: "9876543210",
+    fullName: "Francisco Pasajero Prueba",
+    email: "francisco_pasajero@trayek.com",
+    phoneNumber: "9876543210",
+    verified: false,
   },
 ];
 
 export default function PasajerosPage() {
+  const [passengers, setPassengers] = useState<Passenger[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const rowsPerPage = 1;
   const [search, setSearch] = useState("");
-  const rowsPerPage = 2;
+  const debouncedSearch = useDebounce(search, 500);
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const response = (await apiService.getPassengers(
+          currentPage - 1,
+          debouncedSearch,
+          rowsPerPage
+        )) as PageResponse<Passenger>;
+        console.log(response);
+        setPassengers(response.content);
+        setTotalPages(response.totalPages);
+      } catch (error) {
+        console.error("Error fetching passengers:", error);
+      }
+    };
+    fetchPassengers();
+  }, [currentPage, debouncedSearch]);
 
-  const filteredData = data.filter(
-    (pasajero) =>
-      pasajero.nombre.toLowerCase().includes(search.toLowerCase()) ||
-      pasajero.correo.toLowerCase().includes(search.toLowerCase()) ||
-      pasajero.telefono.includes(search)
-  );
-
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
   return (
     <>
       <PageMeta
@@ -81,7 +90,11 @@ export default function PasajerosPage() {
             </div>
           }
         >
-          <BasicTable<Pasajero> columns={columns} data={paginatedData} />
+          <BasicTable<Passenger>
+            columns={columns}
+            data={passengers}
+            tableType="pasajeros"
+          />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

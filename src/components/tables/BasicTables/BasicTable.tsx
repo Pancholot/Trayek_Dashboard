@@ -19,7 +19,7 @@ interface Column<T> {
 interface BasicTableProps<T> {
   columns: Column<T>[];
   data: T[];
-  tableType?: "conductores" | "vehiculos" | "promociones";
+  tableType?: "conductores" | "vehiculos" | "promociones" | "pasajeros";
 }
 
 export default function BasicTable<T extends object>({
@@ -102,21 +102,30 @@ export default function BasicTable<T extends object>({
                     return (
                       <TableCell key={key} className="px-5 py-4 text-center">
                         <div className="flex flex-col items-center justify-center gap-2">
-                          <Verify
-                            initialValue={value}
-                            labelOn={
-                              tableType === "promociones"
-                                ? "Activar"
-                                : "Aprobar"
-                            }
-                            labelOff={
-                              tableType === "promociones"
-                                ? "Desactivar"
-                                : "Negar"
-                            }
-                          />
-                          {tableType === "conductores" && (
-                            <Suspend initialValue={value} />
+                          {tableType === "pasajeros" ? (
+                            <>
+                              {/* Solo activar/suspender para pasajeros */}
+                              <Suspend initialValue={value} />
+                            </>
+                          ) : (
+                            <>
+                              <Verify
+                                initialValue={value}
+                                labelOn={
+                                  tableType === "promociones"
+                                    ? "Activar"
+                                    : "Aprobar"
+                                }
+                                labelOff={
+                                  tableType === "promociones"
+                                    ? "Desactivar"
+                                    : "Negar"
+                                }
+                              />
+                              {tableType === "conductores" && (
+                                <Suspend initialValue={value} />
+                              )}
+                            </>
                           )}
                         </div>
                       </TableCell>

@@ -5,6 +5,7 @@ import {
   Megaphone,
   CarFront,
   Tickets,
+  Logs,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -44,6 +45,12 @@ const modules = [
     color: "bg-green-500",
     icon: <Megaphone size={32} />,
     path: "/promociones",
+  },
+  {
+    title: "Logs",
+    color: "bg-red-500",
+    icon: <Logs size={32} />,
+    path: "/logs",
   },
 ];
 

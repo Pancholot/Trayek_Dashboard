@@ -17,7 +17,14 @@ export interface Promocion {
   descuento: string;
   cantidadTickets?: string;
   todosUsuarios: "Todos" | "Antiguos" | "Nuevos" | "NA";
-  conductores: "Todos" | "Antiguos" | "Nuevos" | "NA";
+  conductores:
+    | "Todos"
+    | "Antiguos"
+    | "Nuevos"
+    | "NA"
+    | "Diario"
+    | "Semanal"
+    | "Mensual";
   pasajeros: "Todos" | "Antiguos" | "Nuevos" | "NA";
   aplicado: boolean;
 }

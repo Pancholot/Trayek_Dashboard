@@ -10,6 +10,7 @@ import {
   CarFront,
   Tickets,
   LayoutDashboard,
+  Logs,
 } from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -42,6 +43,7 @@ const navItems: NavItem[] = [
       { icon: <Tickets />, name: "Viajes", path: "/viajes" },
       { icon: <Headset />, name: "Soporte", path: "/soporte" },
       { icon: <Megaphone />, name: "Promociones", path: "/promociones" },
+      { icon: <Logs />, name: "Logs", path: "/logs" },
     ],
   },
   /*{

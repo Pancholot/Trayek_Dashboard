@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { Link } from "react-router";
 import { EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
-import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
 import { apiService } from "../../api/apiService";
 import { useNavigate } from "react-router-dom";
@@ -13,7 +11,6 @@ import { setIsLoggedIn } from "../../store/authSlice";
 
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -60,7 +57,7 @@ export default function SignInForm() {
                 onFocus={() => setErrorMessage("")}
               />
             </div>
-            <div>
+            <div className="mb-10">
               <Label>
                 Contraseña <span className="text-error-500">*</span>{" "}
               </Label>
@@ -83,20 +80,6 @@ export default function SignInForm() {
                   )}
                 </span>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Checkbox checked={isChecked} onChange={setIsChecked} />
-                <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">
-                  Mantener Sesión Iniciada
-                </span>
-              </div>
-              <Link
-                to="/reset-password"
-                className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
             </div>
             <Button type="submit" className="w-full" size="sm">
               Inicio de Sesión

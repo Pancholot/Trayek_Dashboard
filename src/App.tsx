@@ -26,6 +26,7 @@ import ViajesPage from "./pages/Dashboard/Elements/Viajes";
 import SoportePage from "./pages/Dashboard/Elements/Soporte";
 import { Navigate } from "react-router-dom";
 import PromocionPage from "./pages/Dashboard/Elements/Promociones";
+import LogsPerfilPage from "./pages/Dashboard/Elements/Logs";
 
 export default function App() {
   return (
@@ -98,6 +99,14 @@ export default function App() {
               element={
                 <ProtectedRoute>
                   <PromocionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/logs"
+              element={
+                <ProtectedRoute>
+                  <LogsPerfilPage />
                 </ProtectedRoute>
               }
             />

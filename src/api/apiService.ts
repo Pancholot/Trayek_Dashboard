@@ -1,5 +1,7 @@
 import { AxiosError } from "axios";
 import axiosInstance from "./axiosInstance";
+import PageResponse from "../types/PageResponse";
+import Passenger from "../types/Passenger";
 
 export const apiService = {
   logIn: async (email: string, password: string) => {
@@ -77,6 +79,36 @@ export const apiService = {
     try {
       const response = await axiosInstance.get("/health");
       return response.status === 200;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(
+          "Axios error during health check:",
+          error.response?.data.msg
+        );
+      } else {
+        console.error("Unexpected error during health check:", error);
+      }
+      return false;
+    }
+  },
+  getPassengers: async (
+    page: number,
+    searchTerm: string,
+    size?: number,
+    sortBy?: string,
+    sortDir?: string
+  ) => {
+    try {
+      const response = await axiosInstance.get("/users/all-passengers", {
+        params: {
+          page,
+          size,
+          sortBy,
+          sortDir,
+          searchTerm,
+        },
+      });
+      return response.data.data as PageResponse<Passenger>;
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(

@@ -60,7 +60,14 @@ export default function AddPromotionModal({
       fechaInicio: fechaInicio.toISOString().split("T")[0],
       fechaExpiracion: fechaExpiracion.toISOString().split("T")[0],
       todosUsuarios: todosUsuarios as "Todos" | "Antiguos" | "Nuevos" | "NA",
-      conductores: conductores as "Todos" | "Antiguos" | "Nuevos" | "NA",
+      conductores: conductores as
+        | "Todos"
+        | "Antiguos"
+        | "Nuevos"
+        | "NA"
+        | "Diario"
+        | "Semanal"
+        | "Mensual",
       pasajeros: pasajeros as "Todos" | "Antiguos" | "Nuevos" | "NA",
       aplicado: false,
     });
@@ -178,8 +185,8 @@ export default function AddPromotionModal({
             value={conductores}
             onChange={(e) => setConductores(capitalizeFirst(e.target.value))}
             required
-            pattern="^(Todos|Antiguos|Nuevos|NA)$"
-            title="Debe ser uno de los valores: Todos, Antiguos, Nuevos o NA."
+            pattern="^(Todos|Antiguos|Nuevos|NA|Diario|Semanal|Mensual)$"
+            title="Debe ser uno de los valores: Todos, Antiguos, Nuevos, NA, Diario, Semanal o Mensual."
           />
           <input
             className="w-full border rounded p-2"
