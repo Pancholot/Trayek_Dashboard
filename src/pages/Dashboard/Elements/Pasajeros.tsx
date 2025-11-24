@@ -15,7 +15,7 @@ const columns: { key: keyof Passenger; label: string }[] = [
   { key: "fullName", label: "Nombre" },
   { key: "email", label: "Correo" },
   { key: "phoneNumber", label: "Teléfono" },
-  { key: "verified", label: "Verificación" },
+  { key: "banned", label: "Suspendido" },
 ];
 
 const data: Passenger[] = [
@@ -24,21 +24,21 @@ const data: Passenger[] = [
     fullName: "Luis Pasajero Prueba",
     email: "luis_pasajero@trayek.com",
     phoneNumber: "8765432101",
-    verified: false,
+    banned: false,
   },
   {
     id: 2,
     fullName: "Sergio Pasajero Prueba",
     email: "sergio_pasajero@trayek.com",
     phoneNumber: "5432109876",
-    verified: false,
+    banned: false,
   },
   {
     id: 3,
     fullName: "Francisco Pasajero Prueba",
     email: "francisco_pasajero@trayek.com",
     phoneNumber: "9876543210",
-    verified: false,
+    banned: false,
   },
 ];
 
@@ -46,7 +46,7 @@ export default function PasajerosPage() {
   const [passengers, setPassengers] = useState<Passenger[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const rowsPerPage = 1;
+  const rowsPerPage = 30;
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
   useEffect(() => {

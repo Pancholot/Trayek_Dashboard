@@ -3,7 +3,7 @@ interface Passenger {
   fullName: string;
   email: string;
   phoneNumber: string;
-  verified: boolean;
+  banned: boolean;
 }
 
 export default Passenger;

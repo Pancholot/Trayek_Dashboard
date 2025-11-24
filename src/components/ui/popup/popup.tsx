@@ -11,14 +11,30 @@ export default function ImagePopover({ src }: { src: string }) {
         <Eye className="w-5 h-5 text-gray-600 dark:text-gray-300" />
       </Popover.Trigger>
       <Popover.Portal>
-        <Popover.Positioner sideOffset={8}>
+        <Popover.Positioner
+          side="right"
+          sideOffset={40}
+          align="start"
+          alignOffset={40}
+          className="z-0"
+        >
           <Popover.Popup className="bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 p-2 max-w-md">
             <Popover.Arrow className="fill-gray-200 dark:fill-gray-700" />
-            <div className="flex flex-col items-center">
+            <div className="relative overflow-hidden rounded-lg max-h-[35vh] max-w-[250px] cursor-zoom-in">
               <img
                 src={src}
                 alt="Preview"
-                className="rounded-lg object-contain max-h-[70vh] max-w-full"
+                className="object-contain w-full h-full transition-transform duration-200"
+                onMouseMove={(e) => {
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const x = ((e.clientX - rect.left) / rect.width) * 100;
+                  const y = ((e.clientY - rect.top) / rect.height) * 100;
+                  e.currentTarget.style.transformOrigin = `${x}% ${y}%`;
+                  e.currentTarget.style.transform = "scale(2.5)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
               />
             </div>
           </Popover.Popup>

@@ -6,14 +6,14 @@ import {
   TableHeader,
   TableRow,
 } from "../../ui/table";
-import { X, Check } from "lucide-react";
-import ImagePopover from "../../ui/popup/popup";
 import Verify from "../../ui/verify/verificar";
 import Suspend from "../../ui/verify/suspend";
+import { renderDocumentStatus } from "../../../helpers/renderDocumentCell";
 
-interface Column<T> {
+export interface Column<T> {
   key: keyof T;
   label: string;
+  render?: (row: T) => React.ReactNode;
 }
 
 interface BasicTableProps<T> {
@@ -76,6 +76,17 @@ export default function BasicTable<T extends object>({
                   const key = `${rowIndex}-${String(col.key)}`;
                   const exists = imageStatus[key];
 
+                  if (col.render) {
+                    return (
+                      <TableCell
+                        key={key}
+                        className="px-5 py-4 text-center align-middle"
+                      >
+                        {col.render(row)}
+                      </TableCell>
+                    );
+                  }
+
                   if (
                     typeof value === "string" &&
                     value.match(/\.(png|jpg|jpeg)$/i)
@@ -86,14 +97,7 @@ export default function BasicTable<T extends object>({
                         className="px-5 py-4 text-center text-theme-sm"
                       >
                         <div className="flex items-center justify-center gap-2">
-                          {exists ? (
-                            <>
-                              <Check className="text-green-500 w-5 h-5" />
-                              <ImagePopover src={value} />
-                            </>
-                          ) : (
-                            <X className="text-red-500 w-5 h-5" />
-                          )}
+                          {renderDocumentStatus(value, exists)}
                         </div>
                       </TableCell>
                     );
@@ -105,7 +109,7 @@ export default function BasicTable<T extends object>({
                           {tableType === "pasajeros" ? (
                             <>
                               {/* Solo activar/suspender para pasajeros */}
-                              <Suspend initialValue={value} />
+                              <Suspend initialValue={true} />
                             </>
                           ) : (
                             <>

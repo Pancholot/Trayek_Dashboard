@@ -1,110 +1,112 @@
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import PageMeta from "../../../components/common/PageMeta";
-import BasicTable from "../../../components/tables/BasicTables/BasicTable";
+import BasicTable, {
+  Column,
+} from "../../../components/tables/BasicTables/BasicTable";
 import SearchBar from "../../../components/common/SearchBar";
 import Pagination from "../../../components/common/Pagination";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Driver from "../../../types/Drivers";
+import DocumentsModal from "../../../components/ui/modal/documentModal";
+import { DocumentItem } from "../../../components/ui/modal/documentModal";
+import { useDebounce } from "../../../hooks/useDebounce";
+import { apiService } from "../../../api/apiService";
+import PageResponse from "../../../types/PageResponse";
 
-interface Conductor {
-  id: number;
-  nombre: string;
-  correo: string;
-  telefono: string;
-  Foto: string;
-  INE: string;
-  licencia: string;
-  tarjetaCirculacion: string;
-  verificado: boolean;
-}
-
-const columns: { key: keyof Conductor; label: string }[] = [
-  { key: "id", label: "ID" },
-  { key: "nombre", label: "Nombre" },
-  { key: "correo", label: "Correo" },
-  { key: "telefono", label: "Teléfono" },
-  { key: "Foto", label: "Foto" },
-  { key: "INE", label: "INE" },
-  { key: "licencia", label: "Licencia" },
-  { key: "tarjetaCirculacion", label: "Tarjeta de Circulación" },
-  { key: "verificado", label: "Verificación" },
+const driverDocs: DocumentItem<Driver>[] = [
+  { label: "Foto", key: "photo" },
+  { label: "INE", key: "INE" },
+  { label: "Licencia", key: "license" },
+  { label: "Comprobante de Domicilio", key: "proofOfAddress" },
+  { label: "Cumplimiento Fiscal", key: "taxCompliance" },
 ];
 
-const data: Conductor[] = [
+const data: Driver[] = [
   {
     id: 1,
-    nombre: "David Conductor Prueba",
-    correo: "david_conductor@trayek.com",
-    telefono: "2226062862",
-    Foto: "/images/Fotos Pruebas/foto.jpg",
+    fullName: "David Conductor Prueba",
+    email: "david_conductor@trayek.com",
+    phoneNumber: "2226062862",
+    photo: "/images/Fotos Pruebas/foto.jpg",
     INE: "/images/Fotos Pruebas/Ine.jpg",
-    licencia: "/images/Fotos Pruebas/Licencia.jpg",
-    tarjetaCirculacion: "/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
-    verificado: false,
+    license: "/images/Fotos Pruebas/Licencia.jpg",
+    proofOfAddress: "/images/Fotos Pruebas/domicilio.jpg",
+    taxCompliance: "/images/Fotos Pruebas/Cumplimiento Fiscal.jpg",
+    verified: false,
   },
   {
     id: 2,
-    nombre: "Antonio Conductor Prueba",
-    correo: "antonio_conductor@trayek.com",
-    telefono: "1234567890",
-    Foto: "/images/Fotos Pruebas/antonio.jpg",
+    fullName: "Antonio Conductor Prueba",
+    email: "antonio_conductor@trayek.com",
+    phoneNumber: "1234567890",
+    photo: "/images/Fotos Pruebas/antonio.jpg",
     INE: "/images/docs/ine-antonio.png",
-    licencia: "/images/docs/licencia-antonio.png",
-    tarjetaCirculacion: "/images/docs/tc-antonio.png",
-    verificado: false,
+    license: "/images/docs/licencia-antonio.png",
+    proofOfAddress: "/images/docs/comprobante-antonio.png",
+    taxCompliance: "/images/docs/fiscal-antonio.png",
+    verified: false,
   },
   {
     id: 3,
-    nombre: "Francisco Conductor Prueba",
-    correo: "francisco_conductor@trayek.com",
-    telefono: "7889456123",
-    Foto: "/images/Fotos Pruebas/francisco.jpg",
+    fullName: "Francisco Conductor Prueba",
+    email: "francisco_conductor@trayek.com",
+    phoneNumber: "7889456123",
+    photo: "/images/Fotos Pruebas/francisco.jpg",
     INE: "/images/docs/ine-francisco.png",
-    licencia: "/images/docs/licencia-francisco.png",
-    tarjetaCirculacion: "/images/docs/tc-francisco.png",
-    verificado: false,
-  },
-  {
-    id: 4,
-    nombre: "Francisco Conductor Prueba",
-    correo: "francisco_conductor@trayek.com",
-    telefono: "7889456123",
-    Foto: "/images/Fotos Pruebas/francisco.jpg",
-    INE: "/images/docs/ine-francisco.png",
-    licencia: "/images/docs/licencia-francisco.png",
-    tarjetaCirculacion: "/images/docs/tc-francisco.png",
-    verificado: false,
-  },
-  {
-    id: 5,
-    nombre: "Francisco Conductor Prueba",
-    correo: "francisco_conductor@trayek.com",
-    telefono: "7889456123",
-    Foto: "/images/Fotos Pruebas/francisco.jpg",
-    INE: "/images/docs/ine-francisco.png",
-    licencia: "/images/docs/licencia-francisco.png",
-    tarjetaCirculacion: "/images/docs/tc-francisco.png",
-    verificado: false,
+    license: "/images/docs/licencia-francisco.png",
+    proofOfAddress: "/images/docs/comprobante-francisco.png",
+    taxCompliance: "/images/docs/fiscal-francisco.png",
+    verified: false,
   },
 ];
 
 export default function ConductoresPage() {
+  const [selectedRow, setSelectedRow] = useState<Driver | null>(null);
+  const [drivers, setDrivers] = useState<Driver[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
-  const [search, setSearch] = useState("");
+  const [totalPages, setTotalPages] = useState(1);
   const rowsPerPage = 2;
+  const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
 
-  const filteredData = data.filter(
-    (conductor) =>
-      conductor.nombre.toLowerCase().includes(search.toLowerCase()) ||
-      conductor.correo.toLowerCase().includes(search.toLowerCase()) ||
-      conductor.telefono.includes(search)
-  );
+  const columns: Column<Driver>[] = [
+    { key: "id", label: "ID" },
+    { key: "fullName", label: "Nombre" },
+    { key: "email", label: "Correo" },
+    { key: "phoneNumber", label: "Teléfono" },
+    {
+      key: "documentos",
+      label: "Documentos",
+      render: (row: Driver) => (
+        <button
+          className="px-3 py-1 bg-blue-dark-Trayek border-2 text-white rounded-lg"
+          onClick={() => setSelectedRow(row)}
+        >
+          Ver
+        </button>
+      ),
+    },
+    { key: "verified", label: "Verificación" },
+  ];
 
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  );
+  useEffect(() => {
+    const fetchPassengers = async () => {
+      try {
+        const response = (await apiService.getDrivers(
+          currentPage - 1,
+          debouncedSearch,
+          rowsPerPage
+        )) as PageResponse<Driver>;
+        console.log(response);
+        setDrivers(response.content);
+        setTotalPages(response.totalPages);
+      } catch (error) {
+        console.error("Error fetching drivers:", error);
+      }
+    };
+    fetchPassengers();
+  }, [currentPage, debouncedSearch]);
 
   return (
     <>
@@ -129,11 +131,20 @@ export default function ConductoresPage() {
             </div>
           }
         >
-          <BasicTable<Conductor>
+          <BasicTable<Driver>
             tableType="conductores"
             columns={columns}
-            data={paginatedData}
+            data={drivers}
           />
+          {selectedRow && (
+            <DocumentsModal
+              open={!!selectedRow}
+              onClose={() => setSelectedRow(null)}
+              title={`Documentos de ${selectedRow.fullName}`}
+              data={selectedRow}
+              documents={driverDocs}
+            />
+          )}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

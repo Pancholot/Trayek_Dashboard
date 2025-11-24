@@ -18,6 +18,7 @@ interface Vehiculo {
   foto_placa: string;
   foto_vehiculo: string;
   seguro_vehiculo: string;
+  registroCirculacion: string;
   verificado: boolean;
 }
 
@@ -33,6 +34,7 @@ const columns: { key: keyof Vehiculo; label: string }[] = [
   { key: "foto_placa", label: "Foto Placa" },
   { key: "foto_vehiculo", label: "Foto Vehículo" },
   { key: "seguro_vehiculo", label: "Seguro Vehículo" },
+  { key: "registroCirculacion", label: "Registro de Circulación" },
   { key: "verificado", label: "Verificación" },
 ];
 
@@ -49,6 +51,7 @@ const data: Vehiculo[] = [
     foto_placa: "/images/Fotos Pruebas/Placa.png",
     foto_vehiculo: "/images/Fotos Pruebas/Coche.jpg",
     seguro_vehiculo: "/images/Fotos Pruebas/seguro.png",
+    registroCirculacion: "/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
     verificado: false,
   },
   {
@@ -63,6 +66,7 @@ const data: Vehiculo[] = [
     foto_placa: "/images/docs/placa-67-DEF-2.png",
     foto_vehiculo: "/images/docs/vehiculo-67-DEF-2.png",
     seguro_vehiculo: "/images/docs/seguro-67-DEF-2.png",
+    registroCirculacion: "/images/docs/registro-67-DEF-2.png",
     verificado: false,
   },
   {
@@ -77,6 +81,7 @@ const data: Vehiculo[] = [
     foto_placa: "/images/docs/placa-87-GHI-3.png",
     foto_vehiculo: "/images/docs/vehiculo-87-GHI-3.png",
     seguro_vehiculo: "/images/docs/seguro-87-GHI-3.png",
+    registroCirculacion: "/images/docs/registro-87-GHI-3.png",
     verificado: false,
   },
 ];
