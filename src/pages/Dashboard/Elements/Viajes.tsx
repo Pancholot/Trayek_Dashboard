@@ -93,7 +93,11 @@ export default function ViajesPage() {
             </div>
           }
         >
-          <BasicTable<Viaje> columns={columns} data={paginatedData} />
+          <BasicTable<Viaje>
+            pageTitle="Viajes"
+            columns={columns}
+            data={paginatedData}
+          />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

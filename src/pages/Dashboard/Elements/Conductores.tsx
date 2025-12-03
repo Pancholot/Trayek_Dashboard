@@ -13,6 +13,7 @@ import { DocumentItem } from "../../../components/ui/modal/documentModal";
 import { useDebounce } from "../../../hooks/useDebounce";
 import { apiService } from "../../../api/apiService";
 import PageResponse from "../../../types/PageResponse";
+import TableSkeleton from "../../../components/tables/BasicTables/TableSkeleton";
 
 const driverDocs: DocumentItem<Driver>[] = [
   { label: "Foto", key: "photo" },
@@ -22,53 +23,16 @@ const driverDocs: DocumentItem<Driver>[] = [
   { label: "Cumplimiento Fiscal", key: "taxCompliance" },
 ];
 
-const data: Driver[] = [
-  {
-    id: 1,
-    fullName: "David Conductor Prueba",
-    email: "david_conductor@trayek.com",
-    phoneNumber: "2226062862",
-    photo: "/images/Fotos Pruebas/foto.jpg",
-    INE: "/images/Fotos Pruebas/Ine.jpg",
-    license: "/images/Fotos Pruebas/Licencia.jpg",
-    proofOfAddress: "/images/Fotos Pruebas/domicilio.jpg",
-    taxCompliance: "/images/Fotos Pruebas/Cumplimiento Fiscal.jpg",
-    verified: false,
-  },
-  {
-    id: 2,
-    fullName: "Antonio Conductor Prueba",
-    email: "antonio_conductor@trayek.com",
-    phoneNumber: "1234567890",
-    photo: "/images/Fotos Pruebas/antonio.jpg",
-    INE: "/images/docs/ine-antonio.png",
-    license: "/images/docs/licencia-antonio.png",
-    proofOfAddress: "/images/docs/comprobante-antonio.png",
-    taxCompliance: "/images/docs/fiscal-antonio.png",
-    verified: false,
-  },
-  {
-    id: 3,
-    fullName: "Francisco Conductor Prueba",
-    email: "francisco_conductor@trayek.com",
-    phoneNumber: "7889456123",
-    photo: "/images/Fotos Pruebas/francisco.jpg",
-    INE: "/images/docs/ine-francisco.png",
-    license: "/images/docs/licencia-francisco.png",
-    proofOfAddress: "/images/docs/comprobante-francisco.png",
-    taxCompliance: "/images/docs/fiscal-francisco.png",
-    verified: false,
-  },
-];
-
 export default function ConductoresPage() {
   const [selectedRow, setSelectedRow] = useState<Driver | null>(null);
-  const [drivers, setDrivers] = useState<Driver[]>(data);
+  const [drivers, setDrivers] = useState<Driver[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+
   const rowsPerPage = 2;
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
+  const [loading, setLoading] = useState(false);
 
   const columns: Column<Driver>[] = [
     { key: "id", label: "ID" },
@@ -91,21 +55,25 @@ export default function ConductoresPage() {
   ];
 
   useEffect(() => {
-    const fetchPassengers = async () => {
+    const fetchDrivers = async () => {
       try {
+        setLoading(true);
         const response = (await apiService.getDrivers(
           currentPage - 1,
           debouncedSearch,
           rowsPerPage
         )) as PageResponse<Driver>;
-        console.log(response);
+
         setDrivers(response.content);
         setTotalPages(response.totalPages);
       } catch (error) {
         console.error("Error fetching drivers:", error);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchPassengers();
+
+    fetchDrivers();
   }, [currentPage, debouncedSearch]);
 
   return (
@@ -115,6 +83,7 @@ export default function ConductoresPage() {
         description="Gestión de conductores del sistema"
       />
       <PageBreadcrumb pageTitle="Conductores" />
+
       <div className="space-y-6">
         <ComponentCard
           title="Listado de Conductores"
@@ -131,11 +100,24 @@ export default function ConductoresPage() {
             </div>
           }
         >
-          <BasicTable<Driver>
-            tableType="conductores"
-            columns={columns}
-            data={drivers}
-          />
+          {loading ? (
+            <TableSkeleton rows={rowsPerPage} columns={columns.length} />
+          ) : (
+            <BasicTable<Driver>
+              pageTitle="Conductores"
+              tableType="conductores"
+              columns={columns}
+              data={drivers}
+              onUpdateRow={(rowIndex, updates) => {
+                setDrivers((prev) => {
+                  const updated = [...prev];
+                  updated[rowIndex] = { ...updated[rowIndex], ...updates };
+                  return updated;
+                });
+              }}
+            />
+          )}
+
           {selectedRow && (
             <DocumentsModal
               open={!!selectedRow}
@@ -143,12 +125,17 @@ export default function ConductoresPage() {
               title={`Documentos de ${selectedRow.fullName}`}
               data={selectedRow}
               documents={driverDocs}
+              masterVerified={selectedRow.verified}
             />
           )}
+
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onChange={setCurrentPage}
+            onChange={(page) => {
+              setLoading(true);
+              setCurrentPage(page);
+            }}
           />
         </ComponentCard>
       </div>

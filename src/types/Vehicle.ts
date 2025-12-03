@@ -7,6 +7,7 @@ interface Vehicle {
   year: string;
   color: string;
   type: string;
+  documentos?: string;
   licensePlatePhoto: string;
   registration: string;
   vehiclePhoto: string;

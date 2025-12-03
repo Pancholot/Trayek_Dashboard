@@ -1,4 +1,4 @@
-import { X, Check, XCircle } from "lucide-react";
+import { X, Check, XCircle, Minus } from "lucide-react";
 import ImagePopover from "../../ui/popup/popup";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,10 @@ interface DocumentsModalProps<T> {
   title: string;
   data: T;
   documents: DocumentItem<T>[];
+  masterVerified?: boolean;
 }
+
+type DocState = "missing" | "pending" | "approved";
 
 export default function DocumentsModal<T>({
   open,
@@ -21,27 +24,85 @@ export default function DocumentsModal<T>({
   title,
   data,
   documents,
+  masterVerified = false,
 }: DocumentsModalProps<T>) {
-  const [imageStatus, setImageStatus] = useState<Record<string, boolean>>({});
+  const [status, setStatus] = useState<Record<string, DocState>>({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     if (!open) return;
 
+    const initialState: Record<string, DocState> = {};
+    let loadedCount = 0;
+
     documents.forEach((doc) => {
+      const key = doc.key as string;
       const value = data[doc.key];
 
-      if (typeof value === "string" && value.match(/\.(jpg|jpeg|png)$/i)) {
-        const img = new Image();
-        img.src = value;
-
-        img.onload = () =>
-          setImageStatus((prev) => ({ ...prev, [doc.key as string]: true }));
-
-        img.onerror = () =>
-          setImageStatus((prev) => ({ ...prev, [doc.key as string]: false }));
+      if (!value || typeof value !== "string") {
+        initialState[key] = "missing";
+        loadedCount++;
+        return;
       }
+
+      const isImage = /\.(jpg|jpeg|png)$/i.test(value);
+      if (!isImage) {
+        initialState[key] = "missing";
+        loadedCount++;
+        return;
+      }
+
+      const img = new Image();
+      img.src = value;
+
+      img.onload = () => {
+        initialState[key] = "pending";
+        loadedCount++;
+        if (loadedCount === documents.length) {
+          setStatus(initialState);
+          setLoaded(true);
+        }
+      };
+
+      img.onerror = () => {
+        initialState[key] = "missing";
+        loadedCount++;
+        if (loadedCount === documents.length) {
+          setStatus(initialState);
+          setLoaded(true);
+        }
+      };
     });
   }, [open, data, documents]);
+
+  useEffect(() => {
+    if (!open) return;
+    if (!loaded) return;
+
+    setStatus((prev) => {
+      const newState = { ...prev };
+
+      if (masterVerified) {
+        Object.keys(newState).forEach((k) => {
+          if (newState[k] === "pending") newState[k] = "approved";
+        });
+      } else {
+        Object.keys(newState).forEach((k) => {
+          if (newState[k] === "approved") newState[k] = "pending";
+        });
+      }
+
+      return newState;
+    });
+  }, [masterVerified, loaded, open]);
+
+  const approve = (key: string) => {
+    setStatus((prev) => ({ ...prev, [key]: "approved" }));
+  };
+
+  const unapprove = (key: string) => {
+    setStatus((prev) => ({ ...prev, [key]: "pending" }));
+  };
 
   if (!open) return null;
 
@@ -61,30 +122,37 @@ export default function DocumentsModal<T>({
 
         <div className="space-y-5">
           {documents.map((doc) => {
+            const key = doc.key as string;
             const value = data[doc.key];
-            const isImage =
-              typeof value === "string" && value.match(/\.(jpg|jpeg|png)$/i);
-
-            const exists = imageStatus[doc.key as string];
+            const state = status[key];
 
             return (
               <div
-                key={String(doc.key)}
+                key={key}
                 className="flex justify-between items-center border-b pb-2"
               >
                 <span className="text-black dark:text-white">{doc.label}</span>
 
-                {isImage ? (
-                  exists ? (
-                    <div className="flex items-center gap-2">
-                      <Check className="text-green-500 w-5 h-5" />
-                      <ImagePopover src={value} />
-                    </div>
-                  ) : (
-                    <XCircle className="text-red-500 w-6 h-6" />
-                  )
-                ) : (
+                {state === "missing" && (
                   <XCircle className="text-red-500 w-6 h-6" />
+                )}
+
+                {state === "pending" && (
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => approve(key)}>
+                      <Minus className="text-orange-500 w-6 h-6" />
+                    </button>
+                    <ImagePopover src={value as string} />
+                  </div>
+                )}
+
+                {state === "approved" && (
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => unapprove(key)}>
+                      <Check className="text-green-500 w-5 h-5" />
+                    </button>
+                    <ImagePopover src={value as string} />
+                  </div>
                 )}
               </div>
             );

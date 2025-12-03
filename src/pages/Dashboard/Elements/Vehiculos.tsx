@@ -1,100 +1,94 @@
 import PageBreadcrumb from "../../../components/common/PageBreadCrumb";
 import ComponentCard from "../../../components/common/ComponentCard";
 import PageMeta from "../../../components/common/PageMeta";
-import BasicTable from "../../../components/tables/BasicTables/BasicTable";
+import BasicTable, {
+  Column,
+} from "../../../components/tables/BasicTables/BasicTable";
 import Pagination from "../../../components/common/Pagination";
 import SearchBar from "../../../components/common/SearchBar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Vehicle from "../../../types/Vehicle";
+import DocumentsModal, {
+  DocumentItem,
+} from "../../../components/ui/modal/documentModal";
+import TableSkeleton from "../../../components/tables/BasicTables/TableSkeleton";
 
-interface Vehiculo {
-  id: number;
-  conductor: string;
-  placa: string;
-  marca: string;
-  modelo: string;
-  año: string;
-  color: string;
-  tipo: string;
-  foto_placa: string;
-  foto_vehiculo: string;
-  seguro_vehiculo: string;
-  registroCirculacion: string;
-  verificado: boolean;
-}
-
-const columns: { key: keyof Vehiculo; label: string }[] = [
-  { key: "id", label: "ID" },
-  { key: "conductor", label: "Conductor" },
-  { key: "placa", label: "Placa" },
-  { key: "marca", label: "Marca" },
-  { key: "modelo", label: "Modelo" },
-  { key: "año", label: "Año" },
-  { key: "color", label: "Color" },
-  { key: "tipo", label: "Tipo" },
-  { key: "foto_placa", label: "Foto Placa" },
-  { key: "foto_vehiculo", label: "Foto Vehículo" },
-  { key: "seguro_vehiculo", label: "Seguro Vehículo" },
-  { key: "registroCirculacion", label: "Registro de Circulación" },
-  { key: "verificado", label: "Verificación" },
-];
-
-const data: Vehiculo[] = [
-  {
-    id: 1,
-    conductor: "David Conductor Prueba",
-    placa: "99-ABC-1",
-    marca: "Toyota",
-    modelo: "Corolla",
-    año: "2020",
-    color: "Blanco",
-    tipo: "Sedán",
-    foto_placa: "/images/Fotos Pruebas/Placa.png",
-    foto_vehiculo: "/images/Fotos Pruebas/Coche.jpg",
-    seguro_vehiculo: "/images/Fotos Pruebas/seguro.png",
-    registroCirculacion: "/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
-    verificado: false,
-  },
-  {
-    id: 2,
-    conductor: "Antonio Conductor Prueba",
-    placa: "67-DEF-2",
-    marca: "BMW",
-    modelo: "X5",
-    año: "2021",
-    color: "Negro",
-    tipo: "Sedán",
-    foto_placa: "/images/docs/placa-67-DEF-2.png",
-    foto_vehiculo: "/images/docs/vehiculo-67-DEF-2.png",
-    seguro_vehiculo: "/images/docs/seguro-67-DEF-2.png",
-    registroCirculacion: "/images/docs/registro-67-DEF-2.png",
-    verificado: false,
-  },
-  {
-    id: 3,
-    conductor: "Francisco Conductor Prueba",
-    placa: "87-GHI-3",
-    marca: "Honda",
-    modelo: "Civic",
-    año: "2019",
-    color: "Azul",
-    tipo: "Sedán",
-    foto_placa: "/images/docs/placa-87-GHI-3.png",
-    foto_vehiculo: "/images/docs/vehiculo-87-GHI-3.png",
-    seguro_vehiculo: "/images/docs/seguro-87-GHI-3.png",
-    registroCirculacion: "/images/docs/registro-87-GHI-3.png",
-    verificado: false,
-  },
+const vehicleDocs: DocumentItem<Vehicle>[] = [
+  { label: "Foto Placa", key: "licensePlatePhoto" },
+  { label: "Foto Vehículo", key: "vehiclePhoto" },
+  { label: "Seguro del Vehículo", key: "vehicleInsurance" },
+  { label: "Registro de Circulación", key: "registration" },
 ];
 
 export default function VehiculosPage() {
+  const [vehicleList, setVehicleList] = useState<Vehicle[]>([
+    {
+      id: 1,
+      driver: "David Conductor Prueba",
+      licensePlate: "99-ABC-1",
+      brand: "Toyota",
+      model: "Corolla",
+      year: "2020",
+      color: "Blanco",
+      type: "Sedán",
+      licensePlatePhoto: "/images/Fotos Pruebas/Placa.png",
+      vehiclePhoto: "/images/Fotos Pruebas/Coche.jpg",
+      vehicleInsurance: "/images/Fotos Pruebas/seguro.png",
+      registration: "/images/Fotos Pruebas/Tarjeta Circulacion.jpg",
+      verified: false,
+    },
+    {
+      id: 2,
+      driver: "Antonio Conductor Prueba",
+      licensePlate: "67-DEF-2",
+      brand: "BMW",
+      model: "X5",
+      year: "2021",
+      color: "Negro",
+      type: "Sedán",
+      licensePlatePhoto: "/images/docs/placa-67-DEF-2.png",
+      vehiclePhoto: "/images/docs/vehiculo-67-DEF-2.png",
+      vehicleInsurance: "/images/docs/seguro-67-DEF-2.png",
+      registration: "/images/docs/registro-67-DEF-2.png",
+      verified: false,
+    },
+    {
+      id: 3,
+      driver: "Francisco Conductor Prueba",
+      licensePlate: "87-GHI-3",
+      brand: "Honda",
+      model: "Civic",
+      year: "2019",
+      color: "Azul",
+      type: "Sedán",
+      licensePlatePhoto: "/images/docs/placa-87-GHI-3.png",
+      vehiclePhoto: "/images/docs/vehiculo-87-GHI-3.png",
+      vehicleInsurance: "/images/docs/seguro-87-GHI-3.png",
+      registration: "/images/docs/registro-87-GHI-3.png",
+      verified: false,
+    },
+  ]);
+
+  const [selectedVehicle, setSelectedVehicle] = useState<Vehicle | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const rowsPerPage = 2;
 
-  const filteredData = data.filter(
+  useEffect(() => {
+    if (!loading) return;
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [loading]);
+
+  const filteredData = vehicleList.filter(
     (vehiculo) =>
-      vehiculo.conductor.toLowerCase().includes(search.toLowerCase()) ||
-      vehiculo.placa.toLowerCase().includes(search.toLowerCase())
+      vehiculo.driver.toLowerCase().includes(search.toLowerCase()) ||
+      vehiculo.licensePlate.toLowerCase().includes(search.toLowerCase())
   );
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
@@ -102,6 +96,30 @@ export default function VehiculosPage() {
     (currentPage - 1) * rowsPerPage,
     currentPage * rowsPerPage
   );
+
+  const columns: Column<Vehicle>[] = [
+    { key: "id", label: "ID" },
+    { key: "driver", label: "Conductor" },
+    { key: "licensePlate", label: "Placa" },
+    { key: "brand", label: "Marca" },
+    { key: "model", label: "Modelo" },
+    { key: "year", label: "Año" },
+    { key: "color", label: "Color" },
+    { key: "type", label: "Tipo" },
+    {
+      key: "documentos" as keyof Vehicle,
+      label: "Documentos",
+      render: (row: Vehicle) => (
+        <button
+          className="px-3 py-1 bg-blue-dark-Trayek border-2 text-white rounded-lg"
+          onClick={() => setSelectedVehicle(row)}
+        >
+          Ver
+        </button>
+      ),
+    },
+    { key: "verified", label: "Verificación" },
+  ];
 
   return (
     <>
@@ -126,15 +144,41 @@ export default function VehiculosPage() {
             </div>
           }
         >
-          <BasicTable<Vehiculo>
-            tableType="vehiculos"
-            columns={columns}
-            data={paginatedData}
-          />
+          {loading ? (
+            <TableSkeleton rows={rowsPerPage} columns={columns.length} />
+          ) : (
+            <BasicTable<Vehicle>
+              pageTitle="Vehículos"
+              tableType="vehiculos"
+              columns={columns}
+              data={paginatedData}
+              onUpdateRow={(rowIndex, updates) => {
+                setVehicleList((prev) => {
+                  const updated = [...prev];
+                  updated[rowIndex] = { ...updated[rowIndex], ...updates };
+                  return updated;
+                });
+              }}
+            />
+          )}
+
+          {selectedVehicle && (
+            <DocumentsModal
+              open={!!selectedVehicle}
+              onClose={() => setSelectedVehicle(null)}
+              title={`Documentos del Vehículo: ${selectedVehicle.licensePlate}`}
+              data={selectedVehicle}
+              documents={vehicleDocs}
+              masterVerified={selectedVehicle.verified}
+            />
+          )}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onChange={setCurrentPage}
+            onChange={(page) => {
+              setLoading(true);
+              setCurrentPage(page);
+            }}
           />
         </ComponentCard>
       </div>

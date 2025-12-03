@@ -128,6 +128,7 @@ export default function PromocionPage() {
         >
           <div className="flex justify-between items-center mb-4"></div>
           <BasicTable<Promocion>
+            pageTitle="Promociones"
             tableType="promociones"
             columns={columns}
             data={paginatedData.map((item) => ({

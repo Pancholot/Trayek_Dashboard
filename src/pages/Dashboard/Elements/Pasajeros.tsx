@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { apiService } from "../../../api/apiService";
 import PageResponse from "../../../types/PageResponse";
 import { useDebounce } from "../../../hooks/useDebounce";
+import TableSkeleton from "../../../components/tables/BasicTables/TableSkeleton";
 
 const columns: { key: keyof Passenger; label: string }[] = [
   { key: "id", label: "ID" },
@@ -46,12 +47,15 @@ export default function PasajerosPage() {
   const [passengers, setPassengers] = useState<Passenger[]>(data);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const rowsPerPage = 30;
+  const rowsPerPage = 10;
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const fetchPassengers = async () => {
       try {
+        setLoading(true);
         const response = (await apiService.getPassengers(
           currentPage - 1,
           debouncedSearch,
@@ -62,8 +66,11 @@ export default function PasajerosPage() {
         setTotalPages(response.totalPages);
       } catch (error) {
         console.error("Error fetching passengers:", error);
+      } finally {
+        setLoading(false);
       }
     };
+
     fetchPassengers();
   }, [currentPage, debouncedSearch]);
 
@@ -90,15 +97,23 @@ export default function PasajerosPage() {
             </div>
           }
         >
-          <BasicTable<Passenger>
-            columns={columns}
-            data={passengers}
-            tableType="pasajeros"
-          />
+          {loading ? (
+            <TableSkeleton rows={rowsPerPage} columns={columns.length} />
+          ) : (
+            <BasicTable<Passenger>
+              pageTitle="Pasajeros"
+              columns={columns}
+              data={passengers}
+              tableType="pasajeros"
+            />
+          )}
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onChange={setCurrentPage}
+            onChange={(page) => {
+              setLoading(true);
+              setCurrentPage(page);
+            }}
           />
         </ComponentCard>
       </div>

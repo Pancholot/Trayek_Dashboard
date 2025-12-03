@@ -14,10 +14,13 @@ export default function SignInForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleSignIn = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
     const response = await apiService.logIn(email, password);
     if (response) {
       console.log("Login successful");
@@ -26,6 +29,7 @@ export default function SignInForm() {
     } else {
       setErrorMessage("Correo electrónico o contraseña incorrectos.");
     }
+    setLoading(false);
   };
   return (
     <div className="flex flex-col flex-1">
@@ -81,8 +85,20 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <Button type="submit" className="w-full" size="sm">
-              Inicio de Sesión
+            <Button
+              type="submit"
+              className="w-full flex items-center justify-center gap-2"
+              size="sm"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                  Cargando...
+                </>
+              ) : (
+                "Inicio de Sesión"
+              )}
             </Button>
           </form>
         </div>

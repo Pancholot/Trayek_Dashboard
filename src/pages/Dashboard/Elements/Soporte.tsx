@@ -75,7 +75,11 @@ export default function SoportePage() {
             </div>
           }
         >
-          <BasicTable<Soporte> columns={columns} data={paginatedData} />
+          <BasicTable<Soporte>
+            pageTitle="Casos de Soporte"
+            columns={columns}
+            data={paginatedData}
+          />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

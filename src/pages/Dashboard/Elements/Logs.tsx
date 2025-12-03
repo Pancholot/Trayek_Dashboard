@@ -88,7 +88,11 @@ export default function LogsPerfilPage() {
             </div>
           }
         >
-          <BasicTable<LogPerfil> columns={columns} data={paginatedData} />
+          <BasicTable<LogPerfil>
+            columns={columns}
+            data={paginatedData}
+            pageTitle="Logs"
+          />
 
           <Pagination
             currentPage={currentPage}

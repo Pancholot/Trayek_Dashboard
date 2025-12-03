@@ -3,6 +3,7 @@ import axiosInstance from "./axiosInstance";
 import PageResponse from "../types/PageResponse";
 import Passenger from "../types/Passenger";
 import Driver from "../types/Drivers";
+import Vehicle from "../types/Vehicle";
 
 export const apiService = {
   logIn: async (email: string, password: string) => {
@@ -154,6 +155,37 @@ export const apiService = {
         );
       } else {
         console.error("Unexpected error during health check:", error);
+      }
+      return false;
+    }
+  },
+
+  getVehicles: async (
+    page: number,
+    searchTerm: string,
+    size?: number,
+    sortBy?: string,
+    sortDir?: string
+  ) => {
+    try {
+      const response = await axiosInstance.get("/vehicles/all", {
+        params: {
+          page,
+          size,
+          sortBy,
+          sortDir,
+          searchTerm,
+        },
+      });
+      return response.data.data as PageResponse<Vehicle>;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.error(
+          "Axios error during fetching vehicles:",
+          error.response?.data.msg
+        );
+      } else {
+        console.error("Unexpected error during fetching vehicles:", error);
       }
       return false;
     }
